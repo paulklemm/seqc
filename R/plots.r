@@ -33,6 +33,18 @@ csBoxPlot <- function(cuff) {
     return()
 }
 
-savePlot <- function(path, filename) {
-
+#' Make cummeRbund report from Cuffdiff result
+#'
+#' @export
+#' @import cummeRbund magrittr ggplot2 rmarkdown
+#' @param cuffdiff_path Path to cuffdiff folder
+#' @param output_path Path to HTML output
+#' @return cummeRbund cuff object
+createReport <- function(cuffdiff_path, output_path) {
+  path_to_report <- system.file("rmd/Report.Rmd", package="seqc")
+  render(path_to_report, params = list(
+    cuffdiff_path = cuffdiff_path
+    ),
+    output_dir = output_path
+  )
 }
