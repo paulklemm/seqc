@@ -6,15 +6,38 @@ The goal of seqc is to provide quality control figures of cuffdiff results using
 
 You can install the development version of seqc using:
 
-``` r
+```r
 devtools::install_github("paulklemm/seqc")
 ```
 
-## TODO: Example
+## Example
 
 This is a basic example which shows you how to solve a common problem:
 
-``` r
-## basic example code
+```r
+library(seqc)
+library(magrittr)
+cuff <- seqc::read_cuffdiff('/beegfs/scratch/bruening_scratch/pklemm/htseq-tools-test/cuffdiff_output/TuUp')
+disp_plot <- cuff %>% dispersionPlot()
+# Print out results
+print("Summary of cuffdiff dataset")
+cuff %>% print()
+disp_plot %>% print()
+# Save the plot
+library(ggplot2)
+disp_plot %>% ggsave("disp_plot.pdf")
 ```
 
+## Generate Report
+
+```r
+rmarkdown::render("Report.Rmd", params = list(
+  cuffdiff_path = '/beegfs/scratch/bruening_scratch/pklemm/htseq-tools-test/cuffdiff_output/TuUp'
+))
+```
+
+## Build Package
+
+```r
+roxygen2::roxygenise(); devtools::build(); devtools::install()
+```

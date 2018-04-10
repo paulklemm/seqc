@@ -1,0 +1,27 @@
+---
+title: Cuffdiff Analysis
+output: html_document
+params:
+   cuffdiff_path: ''
+---
+
+```{r setup}
+library(seqc)
+library(magrittr)
+library(ggplot2)
+cuff <- read_cuffdiff(params$cuffdiff_path)
+```
+
+# Quality Control & Assment
+
+Show content of the cuffdiff object.
+
+```{r load_data}
+cuff %>% print()
+```
+
+## Dispersion Plot
+
+```{r dispersion_plot}
+cuff %>% dispersionPlot()
+```
