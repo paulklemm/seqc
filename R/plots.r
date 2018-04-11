@@ -36,7 +36,7 @@ csBoxPlot <- function(cuff) {
 #' Make cummeRbund report from Cuffdiff result
 #'
 #' @export
-#' @import cummeRbund magrittr ggplot2 rmarkdown
+#' @import magrittr ggplot2 rmarkdown
 #' @param cuffdiff_path Path to cuffdiff folder
 #' @param output_path Path to HTML output
 #' @return cummeRbund cuff object

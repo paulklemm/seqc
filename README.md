@@ -17,7 +17,7 @@ This is a basic example which shows you how to solve a common problem:
 ```r
 library(seqc)
 library(magrittr)
-cuff <- seqc::read_cuffdiff('/beegfs/scratch/bruening_scratch/pklemm/htseq-tools-test/cuffdiff_output/TuUp')
+cuff <- read_cuffdiff('/beegfs/scratch/bruening_scratch/pklemm/htseq-tools-test/cuffdiff_output/TuUp')
 disp_plot <- cuff %>% dispersionPlot()
 # Print out results
 print("Summary of cuffdiff dataset")
