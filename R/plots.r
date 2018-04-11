@@ -15,7 +15,7 @@ read_cuffdiff <- function(path) {
 #' @import cummeRbund magrittr
 #' @param cuff cummeRbund cuff object
 #' @return Plot object
-dispersionPlot <- function(cuff) {
+dispPlot <- function(cuff) {
   genes(cuff) %>%
     dispersionPlot() %>%
     return()
@@ -40,8 +40,10 @@ csBoxPlot <- function(cuff) {
 #' @param cuffdiff_path Path to cuffdiff folder
 #' @param output_path Path to HTML output
 #' @return cummeRbund cuff object
-createReport <- function(cuffdiff_path, output_path) {
+createHTMLReport <- function(cuffdiff_path, output_path) {
+  # https://stackoverflow.com/questions/30377213/how-to-include-rmarkdown-file-in-r-package
   path_to_report <- system.file("rmd/Report.Rmd", package="seqc")
+  # Render the document and put it into the output dir
   render(path_to_report, params = list(
     cuffdiff_path = cuffdiff_path
     ),

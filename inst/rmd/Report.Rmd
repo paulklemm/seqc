@@ -23,5 +23,5 @@ cuff %>% print()
 ## Dispersion Plot
 
 ```{r dispersion_plot}
-cuff %>% dispersionPlot()
+cuff %>% dispPlot()
 ```

@@ -31,9 +31,7 @@ disp_plot %>% ggsave("disp_plot.pdf")
 ## Generate Report
 
 ```r
-rmarkdown::render("Report.Rmd", params = list(
-  cuffdiff_path = '/beegfs/scratch/bruening_scratch/pklemm/htseq-tools-test/cuffdiff_output/TuUp'
-))
+createHTMLReport('/beegfs/scratch/bruening_scratch/pklemm/htseq-tools-test/cuffdiff_output/TuUp', '/beegfs/scratch/bruening_scratch/pklemm')
 ```
 
 ## Build Package
