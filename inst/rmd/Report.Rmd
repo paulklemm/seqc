@@ -22,7 +22,7 @@ saveAndPrintWrap <- function(plot, plot_name) {
 cuff <- read_cuffdiff(params$cuffdiff_path)
 ```
 
-This Notebook is guided by the [cummeRbund Manual](https://www.bioconductor.org/packages/3.7/bioc/vignettes/cummeRbund/inst/doc/cummeRbund-manual.pdf)
+This Notebook is guided by the [cummeRbund Manual](https://www.bioconductor.org/packages/3.7/bioc/vignettes/cummeRbund/inst/doc/cummeRbund-manual.pdf). Accompanying descriptions of the plots are cited from the `cummeRbund` manual.
 
 # Global Statistics & Quality Control
 
