@@ -1,5 +1,15 @@
 # seqc
 
+<!-- TOC -->
+
+* [seqc](#seqc)
+  * [Installation](#installation)
+  * [Example](#example)
+  * [Build Package](#build-package)
+  * [Credits](#credits)
+
+<!-- /TOC -->
+
 The goal of seqc is to provide quality control figures of cuffdiff results using the cummeRbund package. It produces a HTML report.
 
 ## Installation
