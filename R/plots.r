@@ -28,12 +28,12 @@ createHTMLReport <- function(cuffdiff_path, output_path, save_plots) {
     ),
     output_dir = output_path,
     output_options=list(
-      self_contained = FALSE
+      self_contained = TRUE
     )
   )
 }
 
-#' Save ggplot and print it
+#' Save image and return it
 #' 
 #' @export
 #' @import magrittr ggplot2
@@ -42,7 +42,7 @@ createHTMLReport <- function(cuffdiff_path, output_path, save_plots) {
 #' @param output_path path to output
 #' @param save_plot Save plot to disk
 #' @param is_ggplot Plot is ggplot object or not
-saveAndPrint <- function(plot, save_plot = TRUE, plot_name = '', output_path = '', is_ggplot = TRUE) {
+saveReturnPlot <- function(plot, save_plot = TRUE, plot_name = '', output_path = '', is_ggplot = TRUE) {
   if (save_plot) {
     plot_filename <- paste0(output_path, '/', plot_name, '.pdf')
     if (is_ggplot) {

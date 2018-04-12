@@ -2,7 +2,7 @@
 
 export(createHTMLReport)
 export(read_cuffdiff)
-export(saveAndPrint)
+export(saveReturnPlot)
 import(cummeRbund)
 import(ggplot2)
 import(magrittr)

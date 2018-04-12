@@ -16,8 +16,8 @@ params$cuffdiff_path %>% print()
 params$save_plots %>% print()
 params$save_plots_path %>% print()
 # End debug outputs
-saveAndPrintWrap <- function(plot, plot_name, is_ggplot = TRUE) {
-  plot %>% seqc::saveAndPrint(save_plot = params$save_plots, plot_name = plot_name, output_path = params$save_plots_path, is_ggplot = is_ggplot)
+saveAndPrint <- function(plot, plot_name, is_ggplot = TRUE) {
+  plot %>% seqc::saveReturnPlot(save_plot = params$save_plots, plot_name = plot_name, output_path = params$save_plots_path, is_ggplot = is_ggplot)
 }
 cuff <- read_cuffdiff(params$cuffdiff_path)
 ```
@@ -34,25 +34,25 @@ cuff %>% print()
 
 ```{r dispersion_plot}
 cuff %>% genes() %>% dispersionPlot() %>%
-  saveAndPrintWrap('dispersionPlot')
+  saveAndPrint('dispersionPlot')
 ```
 
 > The squared coefficient of variation is a normalized measure of cross-replicate variability that can be useful for evaluating the quality your RNA-seq data. Differences in CV 2 can result in lower numbers of differentially expressed genes due to a higher degree of variability between replicate fpkm estimates.
 
 ```{r fpkmSCVPlot}
 cuff %>% genes() %>% fpkmSCVPlot() %>% 
-  saveAndPrintWrap('genes_scv')
+  saveAndPrint('genes_scv')
 cuff %>% isoforms() %>% fpkmSCVPlot() %>%
-  saveAndPrintWrap('isoforms_scv')
+  saveAndPrint('isoforms_scv')
 ```
 
 > To assess the distributions of FPKM scores across samples, you can use the csDensity plot.
 
 ```{r csdensity}
 cuff %>% genes() %>% csDensity() %>%
-  saveAndPrintWrap('csDensity')
+  saveAndPrint('csDensity')
 cuff %>% genes() %>% csDensity(replicates = TRUE) %>%
-  saveAndPrintWrap('csDensityReplicates')
+  saveAndPrint('csDensityReplicates')
 ```
 
 > Boxplots [of FPKM distributions] can be visualized using the csBoxplot method
@@ -60,9 +60,9 @@ cuff %>% genes() %>% csDensity(replicates = TRUE) %>%
 
 ```{r csBoxplot}
 cuff %>% genes() %>% csBoxplot() %>% 
-  saveAndPrintWrap('csBoxplot')
+  saveAndPrint('csBoxplot')
 cuff %>% genes() %>% csBoxplot(replicates = TRUE) %>%
-  saveAndPrintWrap('csBoxplotReplicates')
+  saveAndPrint('csBoxplotReplicates')
 ```
 
 > A matrix of pairwise scatterplots can be drawn using the csScatterMatrix() method.
@@ -71,16 +71,16 @@ cuff %>% genes() %>% csBoxplot(replicates = TRUE) %>%
 
 ```{r scatterMatrix}
 cuff %>% genes() %>% csScatterMatrix() %>%
-  saveAndPrintWrap('csScatterMatrix')
+  saveAndPrint('csScatterMatrix')
 ```
 
 > Dendrogram of JS distances between conditions and replicates.
 
 ```{r dendogram}
 cuff %>% genes() %>% csDendro() #%>%
-  #saveAndPrintWrap('csDendogram', is_ggplot = FALSE)
+  #saveAndPrint('csDendogram', is_ggplot = FALSE)
 cuff %>% genes() %>% csDendro(replicates = TRUE) #%>%
-  #saveAndPrintWrap('csDendogramReplicates', is_ggplot = FALSE)
+  #saveAndPrint('csDendogramReplicates', is_ggplot = FALSE)
 ```
 
 > MvsA plots can be useful to determine any systematic bias that may be present between conditions. The CuffData method MAplot() can be used to examine these intensity vs fold-change plots. You must specify the sample names to use for the pairwise comparison with x and y:
@@ -91,7 +91,7 @@ cuff %>% genes() %>% csDendro(replicates = TRUE) #%>%
 
 ```{r volcano}
 cuff %>% genes() %>% csVolcanoMatrix() %>%
-  saveAndPrintWrap("csVolcanoMatrix")
+  saveAndPrint("csVolcanoMatrix")
 ```
 
 ## Geneset Level Plots
@@ -114,9 +114,9 @@ sigGeneIDs <- cuff %>% getSig(alpha=0.05, level='genes')
 sigGenes <- cuff %>% getGenes(sigGeneIDs)
 # Make plots
 sigGenes %>% csHeatmap(cluster = 'both') %>% heatmapFixLabels() %>%
-  saveAndPrintWrap('heatmap')
+  saveAndPrint('heatmap')
 sigGenes %>% csHeatmap(cluster = 'both', replicates = TRUE) %>% heatmapFixLabels() %>%
-  saveAndPrintWrap('heatmap_isoforms')
+  saveAndPrint('heatmap_isoforms')
 ```
 
 ## Data Exploration
@@ -126,17 +126,17 @@ sigGenes %>% csHeatmap(cluster = 'both', replicates = TRUE) %>% heatmapFixLabels
 ```{r sigMatrix}
 # Alpha = False discovery value (p-Value)
 cuff %>% sigMatrix(,level='genes',alpha=0.05) %>%
-  saveAndPrintWrap('sigMatrix')
+  saveAndPrint('sigMatrix')
 ```
 
 > Similarities between conditions and/or replicates can provide useful insight into the relationship between various groupings of conditions and can aid in identifying outlier replicates that do not behave as expected. cummeRbund provides the csDistHeat() method to visualize the pairwise similarities between conditions. Again with the replicates argument, distances between individual replicates can be presented.
 
 ```{r distanceMatrix}
 genes(cuff) %>% csDistHeat() %>%
-  saveAndPrintWrap('distanceMatrix')
+  saveAndPrint('distanceMatrix')
 
 genes(cuff) %>% csDistHeat(replicates = TRUE) %>%
-  saveAndPrintWrap('distanceMatrix_replicates')
+  saveAndPrint('distanceMatrix_replicates')
 ```
 
 ### Dimensionality Reduction
@@ -145,20 +145,20 @@ genes(cuff) %>% csDistHeat(replicates = TRUE) %>%
 
 ```{r PCA}
 cuff %>% genes() %>% PCAplot('PC1', 'PC2') %>%
-  saveAndPrintWrap('PCA_genes')
+  saveAndPrint('PCA_genes')
 cuff %>% genes() %>% PCAplot('PC1', 'PC2', replicates = TRUE) %>%
-  saveAndPrintWrap('PCA_genes_replicates')
+  saveAndPrint('PCA_genes_replicates')
 ```
 
 ```{r MDS}
 # Normal MDS plot only makes sense for more than two conditions (cummeRbund calls conditions 'samples' and samples 'replicates'
-if (samples(cuff) %>% nrow() > 2) {
+if (cuff %>% samples() %>% nrow() > 2) {
   cuff %>% genes() %>% MDSplot() %>%
-    saveAndPrintWrap('PCoA')
+    saveAndPrint('PCoA')
 }
 cuff %>% genes() %>% MDSplot(replicates = TRUE) %>%
-  saveAndPrintWrap('PCoA_replicates')
-cuff %>% genes() %>% MDSplot
+  saveAndPrint('PCoA_replicates')
+cuff %>% genes() %>% MDSplot(replicates = TRUE)
 ```
 
 ## Plots in cummeRbund that are not included in this report
