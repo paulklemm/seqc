@@ -16,8 +16,8 @@ params$cuffdiff_path %>% print()
 params$save_plots %>% print()
 params$save_plots_path %>% print()
 # End debug outputs
-saveAndPrintWrap <- function(plot, plot_name) {
-  plot %>% seqc::saveAndPrint(save_plot = params$save_plots, plot_name = plot_name, output_path = params$save_plots_path)
+saveAndPrintWrap <- function(plot, plot_name, is_ggplot = TRUE) {
+  plot %>% seqc::saveAndPrint(save_plot = params$save_plots, plot_name = plot_name, output_path = params$save_plots_path, is_ggplot = is_ggplot)
 }
 cuff <- read_cuffdiff(params$cuffdiff_path)
 ```
@@ -46,7 +46,7 @@ cuff %>% isoforms() %>% fpkmSCVPlot() %>%
   saveAndPrintWrap('isoforms_scv')
 ```
 
-> To assess the distributions of FPKM scores across samples, you can use the csDensity plot
+> To assess the distributions of FPKM scores across samples, you can use the csDensity plot.
 
 ```{r csdensity}
 cuff %>% genes() %>% csDensity() %>%
@@ -54,3 +54,116 @@ cuff %>% genes() %>% csDensity() %>%
 cuff %>% genes() %>% csDensity(replicates = TRUE) %>%
   saveAndPrintWrap('csDensityReplicates')
 ```
+
+> Boxplots [of FPKM distributions] can be visualized using the csBoxplot method
+> Box plot with replicates=TRUE exposes individual replicate FPKM distributions.
+
+```{r csBoxplot}
+cuff %>% genes() %>% csBoxplot() %>% 
+  saveAndPrintWrap('csBoxplot')
+cuff %>% genes() %>% csBoxplot(replicates = TRUE) %>%
+  saveAndPrintWrap('csBoxplotReplicates')
+```
+
+> A matrix of pairwise scatterplots can be drawn using the csScatterMatrix() method.
+> Scatterplots can be useful to identify global changes and trends in gene expression between pairs of conditions.
+> Pairwise scatterplots can identify biases in gene ex- pression between two particular conditions.
+
+```{r scatterMatrix}
+cuff %>% genes() %>% csScatterMatrix() %>%
+  saveAndPrintWrap('csScatterMatrix')
+```
+
+> Dendrogram of JS distances between conditions and replicates.
+
+```{r dendogram}
+cuff %>% genes() %>% csDendro() #%>%
+  #saveAndPrintWrap('csDendogram', is_ggplot = FALSE)
+cuff %>% genes() %>% csDendro(replicates = TRUE) #%>%
+  #saveAndPrintWrap('csDendogramReplicates', is_ggplot = FALSE)
+```
+
+> MvsA plots can be useful to determine any systematic bias that may be present between conditions. The CuffData method MAplot() can be used to examine these intensity vs fold-change plots. You must specify the sample names to use for the pairwise comparison with x and y:
+
+*Not implemented*
+
+> Volcano plots are also available for the CuffData objects.
+
+```{r volcano}
+cuff %>% genes() %>% csVolcanoMatrix() %>%
+  saveAndPrintWrap("csVolcanoMatrix")
+```
+
+## Geneset Level Plots
+
+> The csHeatmap() function is a plotting wrapper that takes as input either a CuffGeneSet or a CuffFeatureSet object (essentially a collection of genes and/or features) and produces a heatmap of FPKM expression values. The ’cluster’ argument can be used to re-order either ’row’, ’column’, or ’both’ dimensions of this matrix. By default, the Jensen-Shannon distance is used as the clustering metric, however, any function that produces a dist object can be passed to the ’cluster’ argument as well.
+
+On `getSig()`:
+
+> By default getSig() outputs a vector of tracking IDs corresponding to all genes that reject the null hypothesis in any condition tested. The default feature type can be changed by adjusting the ’level’ argument to getSig(). In addition, a alpha value can be provided on which to filter the resulting list (the default is 0.05 to match the default of cuffdiff). Significance results for specific pairwise comparisons can be retrieved as well by specifying the two conditions as ’x’ and ’y’. In this case, p-values are adjusted to reduce the impact of multiple-testing correction when only one set of tests is being conducted.
+
+```{r csHeatmap}
+# Remove "|XLOC" labels from heatmap
+heatmapFixLabels <- function(plot) {
+  plot$scales$scales[[2]]$labels <- sub("\\|.*", "",plot$scales$scales[[2]]$labels)
+  plot$scales$scales[[2]]$labels <- sub(",.*", "",plot$scales$scales[[2]]$labels)
+  plot %>% return()
+}
+# Get significant genes
+sigGeneIDs <- cuff %>% getSig(alpha=0.05, level='genes')
+sigGenes <- cuff %>% getGenes(sigGeneIDs)
+# Make plots
+sigGenes %>% csHeatmap(cluster = 'both') %>% heatmapFixLabels() %>%
+  saveAndPrintWrap('heatmap')
+sigGenes %>% csHeatmap(cluster = 'both', replicates = TRUE) %>% heatmapFixLabels() %>%
+  saveAndPrintWrap('heatmap_isoforms')
+```
+
+## Data Exploration
+
+> The sigMatrix() function can provide you with a “quick–and–dirty” view of the number of significant features of a particular type, and at a given alpha (0.05 by default).
+
+```{r sigMatrix}
+# Alpha = False discovery value (p-Value)
+cuff %>% sigMatrix(,level='genes',alpha=0.05) %>%
+  saveAndPrintWrap('sigMatrix')
+```
+
+> Similarities between conditions and/or replicates can provide useful insight into the relationship between various groupings of conditions and can aid in identifying outlier replicates that do not behave as expected. cummeRbund provides the csDistHeat() method to visualize the pairwise similarities between conditions. Again with the replicates argument, distances between individual replicates can be presented.
+
+```{r distanceMatrix}
+genes(cuff) %>% csDistHeat() %>%
+  saveAndPrintWrap('distanceMatrix')
+
+genes(cuff) %>% csDistHeat(replicates = TRUE) %>%
+  saveAndPrintWrap('distanceMatrix_replicates')
+```
+
+### Dimensionality Reduction
+
+> Dimensionality reduction is an informative approach for clustering and exploring the relationships between conditions. It can be useful for feature selection as well as identifying the sources of variability within your data. To this end, we have applied two different dimensionality reduction strategies in cummeRbund: principal component analysis (PCA) and multi-dimensional scaling (MDS). We provide the two wrapper methods, PCAplot and MDSplot.
+
+```{r PCA}
+cuff %>% genes() %>% PCAplot('PC1', 'PC2') %>%
+  saveAndPrintWrap('PCA_genes')
+cuff %>% genes() %>% PCAplot('PC1', 'PC2', replicates = TRUE) %>%
+  saveAndPrintWrap('PCA_genes_replicates')
+```
+
+```{r MDS}
+# Normal MDS plot only makes sense for more than two conditions (cummeRbund calls conditions 'samples' and samples 'replicates'
+if (samples(cuff) %>% nrow() > 2) {
+  cuff %>% genes() %>% MDSplot() %>%
+    saveAndPrintWrap('PCoA')
+}
+cuff %>% genes() %>% MDSplot(replicates = TRUE) %>%
+  saveAndPrintWrap('PCoA_replicates')
+cuff %>% genes() %>% MDSplot
+```
+
+## Plots in cummeRbund that are not included in this report
+
+* Skipped all plots showing individual gene levels - make this interactive?
+* Skipped "Finding similar genes"
+
+> Another common question in large-scale gene expression analyses is ’How can I find genes with similar expression profiles to gene x?’. We have implemented a method, findSimilar to allow you to identify a fixed number of the most similar genes to a given gene of interest.

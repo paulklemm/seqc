@@ -4,7 +4,8 @@
 \alias{saveAndPrint}
 \title{Save ggplot and print it}
 \usage{
-saveAndPrint(plot, save_plot = TRUE, plot_name = "", output_path = "")
+saveAndPrint(plot, save_plot = TRUE, plot_name = "", output_path = "",
+  is_ggplot = TRUE)
 }
 \arguments{
 \item{plot}{ggplot2 plot object}
@@ -14,6 +15,8 @@ saveAndPrint(plot, save_plot = TRUE, plot_name = "", output_path = "")
 \item{plot_name}{name of ggplot file}
 
 \item{output_path}{path to output}
+
+\item{is_ggplot}{Plot is ggplot object or not}
 }
 \description{
 Save ggplot and print it
