@@ -4,12 +4,14 @@
 \alias{createHTMLReport}
 \title{Make cummeRbund report from Cuffdiff result}
 \usage{
-createHTMLReport(cuffdiff_path, output_path)
+createHTMLReport(cuffdiff_path, output_path, save_plots)
 }
 \arguments{
 \item{cuffdiff_path}{Path to cuffdiff folder}
 
 \item{output_path}{Path to HTML output}
+
+\item{save_plots}{Save plots into seperate files}
 }
 \value{
 cummeRbund cuff object
