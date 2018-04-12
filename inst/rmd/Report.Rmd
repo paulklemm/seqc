@@ -33,7 +33,8 @@ cuff %>% print()
 > Several plotting methods are available that allow for quality-control or global analysis of cufflinks data. A good place to begin is to evaluate the quality of the model fitting. Overdispersion is a common problem in RNA-Seq data. As of cufflinks v2.0 mean counts, variance, and dispersion are all emitted, allowing you to visualize the estimated overdispersion for each sample as a quality control measure.
 
 ```{r dispersion_plot}
-cuff %>% dispPlot()
+cuff %>% genes() %>% dispersionPlot() %>%
+  saveAndPrintWrap('dispersionPlot')
 ```
 
 > The squared coefficient of variation is a normalized measure of cross-replicate variability that can be useful for evaluating the quality your RNA-seq data. Differences in CV 2 can result in lower numbers of differentially expressed genes due to a higher degree of variability between replicate fpkm estimates.

@@ -9,48 +9,6 @@ read_cuffdiff <- function(path) {
   cuff %>% return()
 }
 
-#' Quality Control: Dispersion plot
-#'
-#' @export
-#' @import cummeRbund magrittr
-#' @param cuff cummeRbund cuff object
-#' @return Plot object
-dispPlot <- function(cuff) {
-  genes(cuff) %>%
-    dispersionPlot() %>%
-    return()
-}
-
-#' Identify outlier replicates
-#'
-#' @export
-#' @import cummeRbund magrittr
-#' @param cuff cummeRbund cuff object
-#' @return Plot object
-csBoxPlot <- function(cuff) {
-  genes(cuff) %>%
-    csBoxplot(replicates = TRUE) %>%
-    return()
-}
-
-#' Cross replicate variability
-#'
-#' @export
-#' @import cummeRbund magrittr
-#' @param cuff cummeRbund cuff object
-#' @param type Type can be either "genes" or "isoforms"
-#' @return Plot object
-fpkmSCVPlotWrap <- function(cuff, type = 'genes') {
-  if (type == 'genes') {
-    input <- cuff %>% genes()
-  } else {
-    input <- cuff %>% isoforms()
-  }
-  input %>%
-    fpkmSCVPlot() %>%
-    return()
-}
-
 #' Make cummeRbund report from Cuffdiff result
 #'
 #' @export
