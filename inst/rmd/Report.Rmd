@@ -77,10 +77,10 @@ cuff %>% genes() %>% csScatterMatrix() %>%
 > Dendrogram of JS distances between conditions and replicates.
 
 ```{r dendogram}
-cuff %>% genes() %>% csDendro() #%>%
-  #saveAndPrint('csDendogram', is_ggplot = FALSE)
-cuff %>% genes() %>% csDendro(replicates = TRUE) #%>%
-  #saveAndPrint('csDendogramReplicates', is_ggplot = FALSE)
+cuff %>% genes() %>% csDendro() %>%
+  saveAndPrint('csDendogram', is_ggplot = FALSE)
+cuff %>% genes() %>% csDendro(replicates = TRUE) %>%
+  saveAndPrint('csDendogramReplicates', is_ggplot = FALSE)
 ```
 
 > MvsA plots can be useful to determine any systematic bias that may be present between conditions. The CuffData method MAplot() can be used to examine these intensity vs fold-change plots. You must specify the sample names to use for the pairwise comparison with x and y:
