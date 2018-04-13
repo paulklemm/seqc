@@ -1,18 +1,21 @@
 # seqc
 
-<!-- TOC -->
+`seqc` provides quality control figures of `cuffdiff` results using the cummeRbund package. It produces a static HTML report. Optionally you can output the resulting figures separately.
 
-* [seqc](#seqc)
-  * [Installation](#installation)
-  * [Example](#example)
-  * [Build Package](#build-package)
-  * [Links & Additional Information](#links--additional-information)
-    * [Make `R` aware of Bioconductor package dependencies](#make-r-aware-of-bioconductor-package-dependencies)
-    * [Credits](#credits)
+---
+
+<!-- TOC depthFrom:2 -->
+
+* [Installation](#installation)
+* [Example](#example)
+* [Build Package](#build-package)
+* [Links & Additional Information](#links--additional-information)
+  * [Make `R` aware of Bioconductor package dependencies](#make-r-aware-of-bioconductor-package-dependencies)
+  * [Credits](#credits)
 
 <!-- /TOC -->
 
-The goal of seqc is to provide quality control figures of cuffdiff results using the cummeRbund package. It produces a HTML report.
+---
 
 ## Installation
 
@@ -25,7 +28,7 @@ devtools::install_github("paulklemm/seqc")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Create a static HTML report based on a `cuffdiff` output and save all generated figures separately in the `output_path`.
 
 ```r
 library(seqc)
@@ -38,15 +41,19 @@ createHTMLReport(
 
 ## Build Package
 
+If you want to customize the image, download this repository, adapt the code and run the following code to build and install it.
+
 ```r
 roxygen2::roxygenise(); devtools::build(); devtools::install()
 ```
 
 ## Links & Additional Information
 
+These information are not required for running the script and comprise lessons learned and hopefully useful information for fellow `R` users.
+
 ### Make `R` aware of Bioconductor package dependencies
 
-This tool relies on Bioconductor packages. To make `R` aware that some packages are to be downloaded from bioconductor you can use a trick of adding `biocViews:` in your `DESCRIPTION` file (see [DESCRIPTION](https://github.com/paulklemm/seqc/blob/master/DESCRIPTION)). This was described [in this issue](https://github.com/r-lib/devtools/issues/700)
+This tool relies on Bioconductor packages. To make `R` aware that some packages are to be downloaded from bioconductor you can use a trick of adding `biocViews:` in your `DESCRIPTION` file (see [DESCRIPTION](https://github.com/paulklemm/seqc/blob/master/DESCRIPTION)). This was described [in this issue](https://github.com/r-lib/devtools/issues/700).
 
 ### Credits
 
