@@ -17,6 +17,7 @@ The goal of seqc is to provide quality control figures of cuffdiff results using
 You can install the development version of seqc using:
 
 ```r
+# install.packages('devtools')
 devtools::install_github("paulklemm/seqc")
 ```
 
