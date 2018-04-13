@@ -9,7 +9,10 @@ LazyData: true
 ByteCompile: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
+biocViews:
 Depends: 
     cummeRbund
 Imports: 
-    magrittr
+    magrittr,
+    rmarkdown,
+    ggplot2
