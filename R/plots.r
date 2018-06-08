@@ -21,7 +21,7 @@ createHTMLReport <- function(cuffdiff_path, output_path, save_plots) {
   # https://stackoverflow.com/questions/30377213/how-to-include-rmarkdown-file-in-r-package
   path_to_report <- system.file("rmd/Report.Rmd", package="seqc")
   # Render the document and put it into the output dir
-  render(path_to_report, params = list(
+  render(path_to_report, intermediates_dir = output_path, params = list(
     cuffdiff_path = cuffdiff_path,
     save_plots_path = output_path,
     save_plots = save_plots
