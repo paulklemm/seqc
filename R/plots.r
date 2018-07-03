@@ -33,7 +33,7 @@ createHTMLReport <- function(cuffdiff_path, output_path, save_plots) {
   )
 }
 
-#' Save image and return it
+#' Save image and print it
 #' 
 #' @export
 #' @import magrittr ggplot2
@@ -43,18 +43,28 @@ createHTMLReport <- function(cuffdiff_path, output_path, save_plots) {
 #' @param save_plot Save plot to disk
 #' @param is_ggplot Plot is ggplot object or not
 saveReturnPlot <- function(plot, save_plot = TRUE, plot_name = '', output_path = '', is_ggplot = TRUE) {
-  if (save_plot) {
-    plot_filename <- paste0(output_path, '/', plot_name, '.pdf')
-    if (is_ggplot) {
-      # Output the plot to the path
-      ggplot2::ggsave(plot = plot, filename = plot_filename)
-    } else {
-      # Is base plot
-      pdf(plot_filename)
-      plot %>% print()
-      dev.off()
+  saveReturn <- function() {
+    if (save_plot) {
+      plot_filename <- paste0(output_path, '/', plot_name, '.pdf')
+      if (is_ggplot) {
+        # Output the plot to the path
+        ggplot2::ggsave(plot = plot, filename = plot_filename)
+      } else {
+        # Is base plot
+        pdf(plot_filename)
+        plot %>% print()
+        dev.off()
+      }
     }
+    plot %>% print()
   }
-  # Return output
-  plot %>% return()
+  # Some plots may fail. To still get the whole document, wrap the print and saving into a tryCatch
+  tryCatch({
+      saveReturn()
+    },
+    error = function(cond) {
+      print("Cannot generate plot")
+      print(cond)
+      NA %>% return()
+  })
 }

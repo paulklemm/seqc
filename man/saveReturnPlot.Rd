@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.r
 \name{saveReturnPlot}
 \alias{saveReturnPlot}
-\title{Save image and return it}
+\title{Save image and print it}
 \usage{
 saveReturnPlot(plot, save_plot = TRUE, plot_name = "", output_path = "",
   is_ggplot = TRUE)
@@ -19,5 +19,5 @@ saveReturnPlot(plot, save_plot = TRUE, plot_name = "", output_path = "",
 \item{is_ggplot}{Plot is ggplot object or not}
 }
 \description{
-Save image and return it
+Save image and print it
 }
