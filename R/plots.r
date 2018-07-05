@@ -16,15 +16,21 @@ read_cuffdiff <- function(path) {
 #' @param cuffdiff_path Path to cuffdiff folder
 #' @param output_path Path to HTML output
 #' @param save_plots Save plots into seperate files
+#' @param save_width With of exported plot (ggplot only)
+#' @param save_height Height of exported plot in 'in' (ggplot only)
+#' @param save_format Format of exported plot in 'in' (ggplot only)
 #' @return cummeRbund cuff object
-createHTMLReport <- function(cuffdiff_path, output_path, save_plots) {
+createHTMLReport <- function(cuffdiff_path, output_path, save_plots = FALSE, save_width = 7, save_height = 5, save_format = 'pdf') {
   # https://stackoverflow.com/questions/30377213/how-to-include-rmarkdown-file-in-r-package
   path_to_report <- system.file("rmd/Report.Rmd", package="seqc")
   # Render the document and put it into the output dir
   render(path_to_report, intermediates_dir = output_path, params = list(
     cuffdiff_path = cuffdiff_path,
     save_plots_path = output_path,
-    save_plots = save_plots
+    save_plots = save_plots,
+    save_width = save_width,
+    save_height = save_height,
+    save_format = save_format
     ),
     output_dir = output_path,
     output_options=list(
@@ -41,14 +47,26 @@ createHTMLReport <- function(cuffdiff_path, output_path, save_plots) {
 #' @param plot_name name of ggplot file
 #' @param output_path path to output
 #' @param save_plot Save plot to disk
+#' @param save_width With of exported plot (ggplot only)
+#' @param save_height Height of exported plot in 'in' (ggplot only)
+#' @param save_format Format of exported plot in 'in' (ggplot only)
 #' @param is_ggplot Plot is ggplot object or not
-saveReturnPlot <- function(plot, save_plot = TRUE, plot_name = '', output_path = '', is_ggplot = TRUE) {
+saveReturnPlot <- function(
+    plot,
+    save_plot = TRUE,
+    plot_name = '',
+    output_path = '',
+    is_ggplot = TRUE,
+    save_width,
+    save_height,
+    save_format
+  ) {
   saveReturn <- function() {
     if (save_plot) {
-      plot_filename <- paste0(output_path, '/', plot_name, '.pdf')
+      plot_filename <- paste0(output_path, '/', plot_name, '.', save_format)
       if (is_ggplot) {
         # Output the plot to the path
-        ggplot2::ggsave(plot = plot, filename = plot_filename)
+        ggplot2::ggsave(plot = plot, filename = plot_filename, width = save_width, height = save_height)
       } else {
         # Is base plot
         pdf(plot_filename)

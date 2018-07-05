@@ -5,7 +5,7 @@
 \title{Save image and print it}
 \usage{
 saveReturnPlot(plot, save_plot = TRUE, plot_name = "", output_path = "",
-  is_ggplot = TRUE)
+  is_ggplot = TRUE, save_width, save_height, save_format)
 }
 \arguments{
 \item{plot}{ggplot2 plot object}
@@ -17,6 +17,12 @@ saveReturnPlot(plot, save_plot = TRUE, plot_name = "", output_path = "",
 \item{output_path}{path to output}
 
 \item{is_ggplot}{Plot is ggplot object or not}
+
+\item{save_width}{With of exported plot (ggplot only)}
+
+\item{save_height}{Height of exported plot in 'in' (ggplot only)}
+
+\item{save_format}{Format of exported plot in 'in' (ggplot only)}
 }
 \description{
 Save image and print it

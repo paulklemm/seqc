@@ -4,7 +4,8 @@
 \alias{createHTMLReport}
 \title{Make cummeRbund report from Cuffdiff result}
 \usage{
-createHTMLReport(cuffdiff_path, output_path, save_plots)
+createHTMLReport(cuffdiff_path, output_path, save_plots = FALSE,
+  save_width = 7, save_height = 5, save_format = "pdf")
 }
 \arguments{
 \item{cuffdiff_path}{Path to cuffdiff folder}
@@ -12,6 +13,12 @@ createHTMLReport(cuffdiff_path, output_path, save_plots)
 \item{output_path}{Path to HTML output}
 
 \item{save_plots}{Save plots into seperate files}
+
+\item{save_width}{With of exported plot (ggplot only)}
+
+\item{save_height}{Height of exported plot in 'in' (ggplot only)}
+
+\item{save_format}{Format of exported plot in 'in' (ggplot only)}
 }
 \value{
 cummeRbund cuff object

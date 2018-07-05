@@ -5,6 +5,9 @@ params:
    cuffdiff_path: ''
    save_plots: TRUE
    save_plots_path: ''
+   save_width: 5
+   save_height: 7
+   save_format: 'pdf'
 ---
 
 ```{r setup}
@@ -17,7 +20,7 @@ params$save_plots %>% print()
 params$save_plots_path %>% print()
 # End debug outputs
 saveAndPrint <- function(plot, plot_name, is_ggplot = TRUE) {
-  plot %>% seqc::saveReturnPlot(save_plot = params$save_plots, plot_name = plot_name, output_path = params$save_plots_path, is_ggplot = is_ggplot)
+  plot %>% seqc::saveReturnPlot(save_plot = params$save_plots, plot_name = plot_name, output_path = params$save_plots_path, is_ggplot = is_ggplot, save_width = save_width, save_height = save_height, save_format = save_format)
 }
 cuff <- read_cuffdiff(params$cuffdiff_path)
 ```

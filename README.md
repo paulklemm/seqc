@@ -6,12 +6,12 @@
 
 <!-- TOC depthFrom:2 -->
 
-* [Installation](#installation)
-* [Example](#example)
-* [Build Package](#build-package)
-* [Links & Additional Information](#links--additional-information)
-  * [Make `R` aware of Bioconductor package dependencies](#make-r-aware-of-bioconductor-package-dependencies)
-  * [Credits](#credits)
+- [Installation](#installation)
+- [Example](#example)
+- [Build Package](#build-package)
+- [Links & Additional Information](#links--additional-information)
+  - [Make `R` aware of Bioconductor package dependencies](#make-r-aware-of-bioconductor-package-dependencies)
+  - [Credits](#credits)
 
 <!-- /TOC -->
 
@@ -35,7 +35,10 @@ library(seqc)
 createHTMLReport(
   cuffdiff_path = '/beegfs/scratch/bruening_scratch/pklemm/htseq-tools-test/cuffdiff_output/TuUp',
   output_path = '/beegfs/scratch/bruening_scratch/pklemm/seqcOutput',
-  save_plots = TRUE
+  save_plots = TRUE,
+  save_width = 10,
+  save_height = 10,
+  save_format = 'pdf'
 )
 ```
 
@@ -57,5 +60,5 @@ This tool relies on Bioconductor packages. To make `R` aware that some packages 
 
 ### Credits
 
-* This package adapts code provided by the [cummeRbund Manual](https://www.bioconductor.org/packages/3.7/bioc/vignettes/cummeRbund/inst/doc/cummeRbund-manual.pdf)
-* It also adapts code of the [QC.R script](https://github.com/mpg-age-bioinformatics/htseq-tools/blob/master/QC.R) of the [mpg-age-bioinformatics htseq-tools](https://github.com/mpg-age-bioinformatics/htseq-tools)
+- This package adapts code provided by the [cummeRbund Manual](https://www.bioconductor.org/packages/3.7/bioc/vignettes/cummeRbund/inst/doc/cummeRbund-manual.pdf)
+- It also adapts code of the [QC.R script](https://github.com/mpg-age-bioinformatics/htseq-tools/blob/master/QC.R) of the [mpg-age-bioinformatics htseq-tools](https://github.com/mpg-age-bioinformatics/htseq-tools)
