@@ -10,6 +10,17 @@ params:
    save_format: 'pdf'
 ---
 
+```{r debug, eval=FALSE, echo = FALSE}
+# Use this code for debugging the session interactively. Put this as well as the setup chunk to set everything up.
+params <- list()
+params$cuffdiff_path <- '/beegfs/scratch/bruening_scratch/pklemm/htseq-tools-test/cuffdiff_output/TuUp'
+params$output_path <- '/beegfs/scratch/bruening_scratch/pklemm/seqcOutput'
+params$save_plots <- TRUE
+params$save_width <- 10
+params$save_height <- 10
+params$save_format <- 'pdf'
+```
+
 ```{r setup}
 library(seqc)
 library(magrittr)
@@ -95,6 +106,22 @@ cuff %>% genes() %>% csDendro(replicates = TRUE) %>%
 ```{r volcano}
 cuff %>% genes() %>% csVolcanoMatrix() %>%
   saveAndPrint("csVolcanoMatrix")
+```
+
+Distribution of p- and q-values. This is not part of the standard `cummeRbund` package.
+
+```{r p_q_value_distribution}
+cuff %>% genes %>% diffData %>%
+  ggplot(aes(x=p_value)) + 
+    geom_histogram() +
+    scale_y_log10() +
+    ggtitle("p Value distribution (log10 transformed)")
+
+cuff %>% genes %>% diffData %>%
+  ggplot(aes(x=q_value)) + 
+    geom_histogram() +
+    scale_y_log10() +
+    ggtitle("q Value distribution (adjusted p-value, log10 transformed")
 ```
 
 ## Geneset Level Plots
