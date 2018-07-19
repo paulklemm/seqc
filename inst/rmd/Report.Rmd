@@ -13,8 +13,8 @@ params:
 ```{r debug, eval=FALSE, echo = FALSE}
 # Use this code for debugging the session interactively. Put this as well as the setup chunk to set everything up.
 params <- list()
-params$cuffdiff_path <- '/beegfs/scratch/bruening_scratch/pklemm/htseq-tools-test/cuffdiff_output/TuUp'
-params$output_path <- '/beegfs/scratch/bruening_scratch/pklemm/seqcOutput'
+params$cuffdiff_path <- '/beegfs/scratch/bruening_scratch/pklemm/2018-06-johan-ruud-rnaseq-tuxedo/old_run/cuffdiff_output/RUUD'
+params$output_path <- '/beegfs/scratch/bruening_scratch/pklemm/2018-06-johan-ruud-rnaseq-tuxedo/old_run/seqc_output/RUUD'
 params$save_plots <- TRUE
 params$save_width <- 10
 params$save_height <- 10
@@ -141,12 +141,15 @@ heatmapFixLabels <- function(plot) {
 }
 # Get significant genes
 sigGeneIDs <- cuff %>% getSig(alpha=0.05, level='genes')
-sigGenes <- cuff %>% getGenes(sigGeneIDs)
-# Make plots
-sigGenes %>% csHeatmap(cluster = 'both') %>% heatmapFixLabels() %>%
-  saveAndPrint('heatmap')
-sigGenes %>% csHeatmap(cluster = 'both', replicates = TRUE) %>% heatmapFixLabels() %>%
-  saveAndPrint('heatmap_isoforms')
+# Check if there are actually genes passing the significance filter
+if (sigGeneIDs > 0) {
+  sigGenes <- cuff %>% getGenes(sigGeneIDs)
+  # Make plots
+  sigGenes %>% csHeatmap(cluster = 'both') %>% heatmapFixLabels() %>%
+    saveAndPrint('heatmap')
+  sigGenes %>% csHeatmap(cluster = 'both', replicates = TRUE) %>% heatmapFixLabels() %>%
+    saveAndPrint('heatmap_isoforms')
+}
 ```
 
 ## Data Exploration
