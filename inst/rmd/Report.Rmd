@@ -140,7 +140,8 @@ heatmapFixLabels <- function(plot) {
   plot %>% return()
 }
 # Get significant genes
-sigGeneIDs <- cuff %>% getSig(alpha=0.05, level='genes')
+minPValue <- 0.05
+sigGeneIDs <- cuff %>% getSig(alpha=minPValue, level='genes')
 # Check if there are actually genes passing the significance filter
 if (sigGeneIDs > 0) {
   sigGenes <- cuff %>% getGenes(sigGeneIDs)
@@ -149,6 +150,8 @@ if (sigGeneIDs > 0) {
     saveAndPrint('heatmap')
   sigGenes %>% csHeatmap(cluster = 'both', replicates = TRUE) %>% heatmapFixLabels() %>%
     saveAndPrint('heatmap_isoforms')
+} else {
+  paste0("No genes significant with p-value <= ", minPValue) %>% print()
 }
 ```
 
