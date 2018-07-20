@@ -143,7 +143,7 @@ heatmapFixLabels <- function(plot) {
 minPValue <- 0.05
 sigGeneIDs <- cuff %>% getSig(alpha=minPValue, level='genes')
 # Check if there are actually genes passing the significance filter
-if (sigGeneIDs > 0) {
+if (length(sigGeneIDs) > 0) {
   sigGenes <- cuff %>% getGenes(sigGeneIDs)
   # Make plots
   sigGenes %>% csHeatmap(cluster = 'both') %>% heatmapFixLabels() %>%
