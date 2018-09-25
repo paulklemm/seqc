@@ -4,8 +4,9 @@
 \alias{saveReturnPlot}
 \title{Save image and print it}
 \usage{
-saveReturnPlot(plot, save_plot = TRUE, plot_name = "", output_path = "",
-  is_ggplot = TRUE, save_width, save_height, save_format)
+saveReturnPlot(plot, save_plot = TRUE, plot_name = "",
+  output_path = "", is_ggplot = TRUE, save_width, save_height,
+  save_format)
 }
 \arguments{
 \item{plot}{ggplot2 plot object}

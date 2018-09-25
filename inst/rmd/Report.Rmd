@@ -1,6 +1,19 @@
 ---
-title: Cuffdiff Analysis
-output: html_document
+title: SeQC
+description: |
+  Cuffdiff Analysis using cummeRbund.
+author:
+  - name: SeQC
+    url: https://github.com/paulklemm/seqc
+    affiliation: MPI for Metabolism Research / MPI for Healthy Ageing
+    affiliation_url: https://github.com/paulklemm/seqc
+date: "`r Sys.Date()`"
+output:
+  radix::radix_article:
+    toc: true
+    toc_depth: 2
+    fig_width: 12
+    fig_height: 8
 params:
    cuffdiff_path: ''
    save_plots: TRUE
@@ -10,15 +23,17 @@ params:
    save_format: 'pdf'
 ---
 
-```{r debug, eval=FALSE, echo = FALSE}
+```{r debug, echo = FALSE}
 # Use this code for debugging the session interactively. Put this as well as the setup chunk to set everything up.
-params <- list()
-params$cuffdiff_path <- '/beegfs/scratch/bruening_scratch/pklemm/2018-06-johan-ruud-rnaseq-tuxedo/old_run/cuffdiff_output/RUUD'
-params$output_path <- '/beegfs/scratch/bruening_scratch/pklemm/2018-06-johan-ruud-rnaseq-tuxedo/old_run/seqc_output/RUUD'
-params$save_plots <- TRUE
-params$save_width <- 10
-params$save_height <- 10
-params$save_format <- 'pdf'
+if (!exists('params')) {
+  params <- list()
+  params$cuffdiff_path <- '/beegfs/scratch/bruening_scratch/pklemm/2018-06-johan-ruud-rnaseq-tuxedo/old_run/cuffdiff_output/RUUD'
+  params$output_path <- '/beegfs/scratch/bruening_scratch/pklemm/2018-06-johan-ruud-rnaseq-tuxedo/old_run/seqc_output/RUUD'
+  params$save_plots <- TRUE
+  params$save_width <- 10
+  params$save_height <- 10
+  params$save_format <- 'pdf'
+}
 ```
 
 ```{r setup}
@@ -26,9 +41,7 @@ library(seqc)
 library(magrittr)
 library(ggplot2)
 # Debug outputs
-params$cuffdiff_path %>% print()
-params$save_plots %>% print()
-params$save_plots_path %>% print()
+params %>% print()
 # End debug outputs
 saveAndPrint <- function(plot, plot_name, is_ggplot = TRUE) {
   plot %>% seqc::saveReturnPlot(save_plot = params$save_plots, plot_name = plot_name, output_path = params$save_plots_path, is_ggplot = is_ggplot, save_width = save_width, save_height = save_height, save_format = save_format)
@@ -46,14 +59,14 @@ cuff %>% print()
 
 > Several plotting methods are available that allow for quality-control or global analysis of cufflinks data. A good place to begin is to evaluate the quality of the model fitting. Overdispersion is a common problem in RNA-Seq data. As of cufflinks v2.0 mean counts, variance, and dispersion are all emitted, allowing you to visualize the estimated overdispersion for each sample as a quality control measure.
 
-```{r dispersion_plot}
+```{r dispersion_plot, layout="l-body-outset"}
 cuff %>% genes() %>% dispersionPlot() %>%
   saveAndPrint('dispersionPlot')
 ```
 
 > The squared coefficient of variation is a normalized measure of cross-replicate variability that can be useful for evaluating the quality your RNA-seq data. Differences in CV 2 can result in lower numbers of differentially expressed genes due to a higher degree of variability between replicate fpkm estimates.
 
-```{r fpkmSCVPlot}
+```{r fpkmSCVPlot, layout="l-body-outset"}
 cuff %>% genes() %>% fpkmSCVPlot() %>% 
   saveAndPrint('genes_scv')
 cuff %>% isoforms() %>% fpkmSCVPlot() %>%
@@ -62,7 +75,7 @@ cuff %>% isoforms() %>% fpkmSCVPlot() %>%
 
 > To assess the distributions of FPKM scores across samples, you can use the csDensity plot.
 
-```{r csdensity}
+```{r csdensity, layout="l-body-outset"}
 cuff %>% genes() %>% csDensity() %>%
   saveAndPrint('csDensity')
 cuff %>% genes() %>% csDensity(replicates = TRUE) %>%
@@ -72,7 +85,7 @@ cuff %>% genes() %>% csDensity(replicates = TRUE) %>%
 > Boxplots [of FPKM distributions] can be visualized using the csBoxplot method
 > Box plot with replicates=TRUE exposes individual replicate FPKM distributions.
 
-```{r csBoxplot}
+```{r csBoxplot, layout="l-body-outset"}
 cuff %>% genes() %>% csBoxplot() %>% 
   saveAndPrint('csBoxplot')
 cuff %>% genes() %>% csBoxplot(replicates = TRUE) %>%
@@ -83,14 +96,14 @@ cuff %>% genes() %>% csBoxplot(replicates = TRUE) %>%
 > Scatterplots can be useful to identify global changes and trends in gene expression between pairs of conditions.
 > Pairwise scatterplots can identify biases in gene ex- pression between two particular conditions.
 
-```{r scatterMatrix}
+```{r scatterMatrix, layout="l-body-outset"}
 cuff %>% genes() %>% csScatterMatrix() %>%
   saveAndPrint('csScatterMatrix')
 ```
 
 > Dendrogram of JS distances between conditions and replicates.
 
-```{r dendogram}
+```{r dendogram, layout="l-page"}
 cuff %>% genes() %>% csDendro() %>%
   saveAndPrint('csDendogram', is_ggplot = FALSE)
 cuff %>% genes() %>% csDendro(replicates = TRUE) %>%
@@ -103,14 +116,14 @@ cuff %>% genes() %>% csDendro(replicates = TRUE) %>%
 
 > Volcano plots are also available for the CuffData objects.
 
-```{r volcano}
+```{r volcano, layout="l-page"}
 cuff %>% genes() %>% csVolcanoMatrix() %>%
   saveAndPrint("csVolcanoMatrix")
 ```
 
 Distribution of p- and q-values. This is not part of the standard `cummeRbund` package.
 
-```{r p_q_value_distribution}
+```{r p_q_value_distribution, layout="l-body-outset"}
 cuff %>% genes %>% diffData %>%
   ggplot(aes(x=p_value)) + 
     geom_histogram() +
@@ -132,7 +145,7 @@ On `getSig()`:
 
 > By default getSig() outputs a vector of tracking IDs corresponding to all genes that reject the null hypothesis in any condition tested. The default feature type can be changed by adjusting the ’level’ argument to getSig(). In addition, a alpha value can be provided on which to filter the resulting list (the default is 0.05 to match the default of cuffdiff). Significance results for specific pairwise comparisons can be retrieved as well by specifying the two conditions as ’x’ and ’y’. In this case, p-values are adjusted to reduce the impact of multiple-testing correction when only one set of tests is being conducted.
 
-```{r csHeatmap}
+```{r csHeatmap, layout="l-page"}
 # Remove "|XLOC" labels from heatmap
 heatmapFixLabels <- function(plot) {
   plot$scales$scales[[2]]$labels <- sub("\\|.*", "",plot$scales$scales[[2]]$labels)
@@ -159,7 +172,7 @@ if (length(sigGeneIDs) > 0) {
 
 > The sigMatrix() function can provide you with a “quick–and–dirty” view of the number of significant features of a particular type, and at a given alpha (0.05 by default).
 
-```{r sigMatrix}
+```{r sigMatrix, layout="l-page"}
 # Alpha = False discovery value (p-Value)
 cuff %>% sigMatrix(,level='genes',alpha=0.05) %>%
   saveAndPrint('sigMatrix')
@@ -167,7 +180,7 @@ cuff %>% sigMatrix(,level='genes',alpha=0.05) %>%
 
 > Similarities between conditions and/or replicates can provide useful insight into the relationship between various groupings of conditions and can aid in identifying outlier replicates that do not behave as expected. cummeRbund provides the csDistHeat() method to visualize the pairwise similarities between conditions. Again with the replicates argument, distances between individual replicates can be presented.
 
-```{r distanceMatrix}
+```{r distanceMatrix, layout="l-page"}
 genes(cuff) %>% csDistHeat() %>%
   saveAndPrint('distanceMatrix')
 
@@ -179,14 +192,14 @@ genes(cuff) %>% csDistHeat(replicates = TRUE) %>%
 
 > Dimensionality reduction is an informative approach for clustering and exploring the relationships between conditions. It can be useful for feature selection as well as identifying the sources of variability within your data. To this end, we have applied two different dimensionality reduction strategies in cummeRbund: principal component analysis (PCA) and multi-dimensional scaling (MDS). We provide the two wrapper methods, PCAplot and MDSplot.
 
-```{r PCA}
+```{r PCA, layout="l-page"}
 cuff %>% genes() %>% PCAplot('PC1', 'PC2') %>%
   saveAndPrint('PCA_genes')
 cuff %>% genes() %>% PCAplot('PC1', 'PC2', replicates = TRUE) %>%
   saveAndPrint('PCA_genes_replicates')
 ```
 
-```{r MDS}
+```{r MDS, layout="l-page"}
 # Normal MDS plot only makes sense for more than two conditions (cummeRbund calls conditions 'samples' and samples 'replicates'
 if (cuff %>% samples() %>% nrow() > 2) {
   cuff %>% genes() %>% MDSplot() %>%
