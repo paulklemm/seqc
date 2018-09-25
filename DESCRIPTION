@@ -15,4 +15,5 @@ Depends:
 Imports: 
     magrittr,
     rmarkdown,
-    ggplot2
+    ggplot2,
+    radix
