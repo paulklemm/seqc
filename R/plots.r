@@ -34,6 +34,11 @@ createHTMLReport <- function(cuffdiff_path, output_path, save_plots = FALSE, sav
       save_height = save_height,
       save_format = save_format
     ),
+    # Change the intermediate path to the output to avoid write access errors
+    intermediates_dir = output_path,
+    knit_root_dir = output_path,
+    # clean: TRUE to clean intermediate files created during rendering.
+    clean: TRUE,
     output_dir = output_path,
     output_options = list(
       self_contained = TRUE
