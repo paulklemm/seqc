@@ -214,20 +214,20 @@ cuff %>% genes() %>% MDSplot(replicates = TRUE)
 
 ### Custom: Own heat map implementation
 
-Since the heat maps produced by cummeRbund usually look very busy we did a custom implementation of it
+Since the heat maps produced by cummeRbund usually look very busy we did a custom implementation of it. This one has a more stringent q-value cutoff of `0.005`.
 
-```{r custom_heatmap, layout="l-page"}
-q_value_cutoff <- 0.05
+```{r custom_heatmap, layout="l-page", warning=FALSE, error=FALSE, message=FALSE}
+q_value_cutoff_heatmap <- 0.005
 
 # Get FPKM per Replicate
-cummeRbund::repFpkm(cummeRbund::genes(cuff)) %>%
+custom_heat_map <- cummeRbund::repFpkm(cummeRbund::genes(cuff)) %>%
   tibble::as_tibble() %>%
   # Filter for significant genes
   dplyr::right_join(
     # Get list of significant genes
     cummeRbund::diffData(cummeRbund::genes(cuff)) %>%
       tibble::as_tibble() %>%
-      dplyr::filter(q_value <= q_value_cutoff) %>%
+      dplyr::filter(q_value <= q_value_cutoff_heatmap) %>%
       dplyr::select(gene_id)
   ) %>%
   dplyr::select(gene_id, rep_name, fpkm) %>%
@@ -243,14 +243,16 @@ cummeRbund::repFpkm(cummeRbund::genes(cuff)) %>%
       axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),
       axis.text.y = element_blank(),
       axis.ticks.y = element_blank()
-    ) %>%
+    )
+
+custom_heat_map %>%
   saveAndPrint('Heatmap_replicates_own')
 ```
 
 ### Custom: PCA plot
 
-```{r custom_pca, layout="l-page"}
-cummeRbund::repFpkm(cummeRbund::genes(cuff)) %>%
+```{r custom_pca, layout="l-page", warning=FALSE, error=FALSE, message=FALSE}
+custom_pca_plot <- cummeRbund::repFpkm(cummeRbund::genes(cuff)) %>%
   # Make a data frame that contains each replicate as column and each gene as row
   tibble::as_tibble() %>%
   dplyr::select(gene_id, rep_name, fpkm) %>%
@@ -282,7 +284,9 @@ cummeRbund::repFpkm(cummeRbund::genes(cuff)) %>%
     ggrepel::geom_text_repel() +
     xlab(paste0("Principal Component 1 (", proportion_of_variance$variance_proportion[1] %>% round(digits = 2), "% variance explained)")) +
     ylab(paste0("Principal Component 2 (", proportion_of_variance$variance_proportion[2] %>% round(digits = 2), "% variance explained)")) +
-    theme_classic() %>%
+    theme_classic()
+
+custom_pca_plot %>%
   saveAndPrint('PCA_own')
 ```
 
