@@ -262,7 +262,7 @@ cummeRbund::repFpkm(cummeRbund::genes(cuff)) %>%
   prcomp() %>%
   (function(prcomp_result) {
     # Calculate proportion of variance
-    proportion_of_variance <<- tibble(
+    proportion_of_variance <<- tibble::tibble(
       pc = paste0("PC", 1:nrow(prcomp_result$rotation)),
       variance_proportion = ((prcomp_result$sdev^2) / (sum(prcomp_result$sdev^2)))*100
     )
